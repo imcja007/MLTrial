@@ -23,6 +23,9 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private InputImage image;
+    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
+    Matcher m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +71,9 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            // imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            //Bitmap newBit=getResizedBitmap(imageBitmap,0, 0, width, height, matrix, false)
             imageFromBitmap(imageBitmap);
             imageView.setImageBitmap(imageBitmap);
         }
@@ -86,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                                 // [START mlkit_process_text_block]
                                 String resultText = result.getText();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-                                textView.setText(resultText);
+                                textView.setText("Result     " + resultText + "\nRegex:  " + pattern.matcher(resultText).matches());
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
                                     Point[] blockCornerPoints = block.getCornerPoints();
