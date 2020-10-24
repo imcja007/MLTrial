@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                                 // [START mlkit_process_text_block]
                                 String resultText = result.getText();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-                                textView.setText("Result     " + resultText + "\nRegex:  " + pattern.matcher(resultText).matches());
+                                textView.setText("Result     " + resultText.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + pattern.matcher(resultText).matches());
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
                                     Point[] blockCornerPoints = block.getCornerPoints();
