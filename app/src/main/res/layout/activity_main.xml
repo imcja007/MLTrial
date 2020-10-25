@@ -8,15 +8,18 @@
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="match_parent"
-        android:layout_height="1000px"
-        android:layout_marginTop="30dp" />
+        android:layout_height="342dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="7dp" />
 
     <TextView
         android:id="@+id/text_display"
-        android:layout_width="match_parent"
-        android:layout_height="550px"
+        android:layout_width="269dp"
+        android:layout_height="170dp"
         android:layout_below="@+id/capture_image"
-        android:layout_marginTop="21dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
         android:text="Detected text here!!"
         android:textSize="26dp" />
 
@@ -25,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="120px"
         android:layout_below="@id/image_view"
-        android:layout_marginTop="26dp"
+        android:layout_marginTop="12dp"
         android:text="Capture image" />
 
 

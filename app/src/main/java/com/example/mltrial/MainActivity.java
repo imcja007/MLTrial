@@ -34,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private InputImage image;
-    String resultText;
+    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
+    Matcher m;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,13 +71,15 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
+
+            // imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+            //Bitmap newBit=getResizedBitmap(imageBitmap,0, 0, width, height, matrix, false)
             imageFromBitmap(imageBitmap);
             imageView.setImageBitmap(imageBitmap);
         }
     }
 
     private void imageFromBitmap(Bitmap bitmap) {
-
         int rotationDegree = 0;
         // [START image_from_bitmap]
         image = InputImage.fromBitmap(bitmap, rotationDegree);
@@ -89,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Text result) {
                                 // [START mlkit_process_text_block]
-                                resultText = result.getText().trim();
+                                String resultText = result.getText();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-                                textView.setText(resultText);
+                                textView.setText("Result     " + resultText.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + pattern.matcher(resultText).matches());
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
                                     Point[] blockCornerPoints = block.getCornerPoints();
@@ -107,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
                                         }
-
                                     }
                                 }
                             }
@@ -120,11 +122,7 @@ public class MainActivity extends AppCompatActivity {
                                         // ...
                                     }
                                 });
-        String test = resultText;
-        Pattern registrationNumber = Pattern.compile("^[A-Z|a-z]{2}[0-9]{1,2}[A-Z|a-z]{0,3}[0-9]{4}$");
-        Matcher match = registrationNumber.matcher(test);
-        if (match.matches()) {
-            System.out.println("--------SUCCESS--------");
-        }
     }
+
+
 }
