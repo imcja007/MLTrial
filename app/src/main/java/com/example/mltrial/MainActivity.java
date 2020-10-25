@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,7 +24,9 @@ import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
+import com.theartofdev.edmodo.cropper.CropImage;
 
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,12 +34,16 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    public static final int PERMISSION_REQUEST_CODE = 1001;//request code for Camera and External Storage permission
+    private static final int CAMERA_REQUEST_CODE = 1002;//request code for capture image
+    private static final int CROP_REQUEST_CODE = 1003;//request code for crop
     private Button captureImage;
     private ImageView imageView;
     private TextView textView;
     private InputImage image;
     Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
     Matcher m;
+    Uri mImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,15 +54,18 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         textView = findViewById(R.id.text_display);
 
-        captureImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dispatchTakePictureIntent();
-
-            }
-        });
+//        captureImage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                //dispatchTakePictureIntent();
+//
+//            }
+//        });
     }
 
+    public void onChooseFile(View v) {
+        CropImage.activity().start(MainActivity.this);
+    }
 
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -65,19 +76,44 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
+        CropImage.ActivityResult result = CropImage.getActivityResult(data);
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+//            CropImage.ActivityResult result= CropImage.getActivityResult(data) ;
 
-            // imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-            //Bitmap newBit=getResizedBitmap(imageBitmap,0, 0, width, height, matrix, false)
-            imageFromBitmap(imageBitmap);
-            imageView.setImageBitmap(imageBitmap);
+            if (resultCode == RESULT_OK) {
+                mImageUri = result.getUri();
+                imageView.setImageURI(mImageUri);
+
+                try {
+                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
+                    imageFromBitmap(bitmap);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+            Exception e = result.getError();
+            Toast.makeText(this, "Possible error is :  " + e, Toast.LENGTH_SHORT);
+
         }
     }
+
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//       if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+//            Bundle extras = data.getExtras();
+//            Bitmap imageBitmap = (Bitmap) extras.get("data");
+//
+//            // imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//            //Bitmap newBit=getResizedBitmap(imageBitmap,0, 0, width, height, matrix, false)
+//            imageFromBitmap(imageBitmap);
+//            imageView.setImageBitmap(imageBitmap);
+//        }
+//    }
 
     private void imageFromBitmap(Bitmap bitmap) {
         int rotationDegree = 0;
@@ -123,6 +159,5 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
     }
-
 
 }
