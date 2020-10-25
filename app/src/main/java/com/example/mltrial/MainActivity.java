@@ -23,6 +23,9 @@ import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private TextView textView;
     private InputImage image;
+    String resultText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void imageFromBitmap(Bitmap bitmap) {
+
         int rotationDegree = 0;
         // [START image_from_bitmap]
         image = InputImage.fromBitmap(bitmap, rotationDegree);
@@ -84,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Text result) {
                                 // [START mlkit_process_text_block]
-                                String resultText = result.getText();
+                                resultText = result.getText().trim();
                                 System.out.println("RESULT TEXT=====================" + resultText);
                                 textView.setText(resultText);
                                 for (Text.TextBlock block : result.getTextBlocks()) {
@@ -102,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
                                         }
+
                                     }
                                 }
                             }
@@ -114,7 +120,11 @@ public class MainActivity extends AppCompatActivity {
                                         // ...
                                     }
                                 });
+        String test = resultText;
+        Pattern registrationNumber = Pattern.compile("^[A-Z|a-z]{2}[0-9]{1,2}[A-Z|a-z]{0,3}[0-9]{4}$");
+        Matcher match = registrationNumber.matcher(test);
+        if (match.matches()) {
+            System.out.println("--------SUCCESS--------");
+        }
     }
-
-
 }
