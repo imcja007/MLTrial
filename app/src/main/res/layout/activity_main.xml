@@ -29,6 +29,7 @@
         android:layout_height="120px"
         android:layout_below="@id/image_view"
         android:layout_marginTop="12dp"
+        android:onClick="onChooseFile"
         android:text="Capture image" />
 
 
