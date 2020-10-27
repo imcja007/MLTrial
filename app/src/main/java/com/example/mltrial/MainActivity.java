@@ -1,6 +1,5 @@
 package com.example.mltrial;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -9,7 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,61 +25,48 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
-    public static final int PERMISSION_REQUEST_CODE = 1001;//request code for Camera and External Storage permission
-    private static final int CAMERA_REQUEST_CODE = 1002;//request code for capture image
-    private static final int CROP_REQUEST_CODE = 1003;//request code for crop
-    private Button captureImage;
+
     private ImageView imageView;
-    private TextView textView;
+    public static TextView textView;
+    public static String number;
+    static Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
     private InputImage image;
-    Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
-    Matcher m;
+    static String resultText;
     Uri mImageUri;
+    private EditText t1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        captureImage = findViewById(R.id.capture_image);
         imageView = findViewById(R.id.image_view);
         textView = findViewById(R.id.text_display);
+        t1 = findViewById(R.id.regNo);
 
-//        captureImage.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                //dispatchTakePictureIntent();
-//
-//            }
-//        });
+
     }
 
     public void onChooseFile(View v) {
         CropImage.activity().start(MainActivity.this);
+
     }
 
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        try {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-        } catch (ActivityNotFoundException e) {
-            // display error state to the user
-        }
-    }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         CropImage.ActivityResult result = CropImage.getActivityResult(data);
         if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
-//            CropImage.ActivityResult result= CropImage.getActivityResult(data) ;
+
 
             if (resultCode == RESULT_OK) {
                 mImageUri = result.getUri();
@@ -101,20 +87,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//       if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//
-//            // imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-//            //Bitmap newBit=getResizedBitmap(imageBitmap,0, 0, width, height, matrix, false)
-//            imageFromBitmap(imageBitmap);
-//            imageView.setImageBitmap(imageBitmap);
-//        }
-//    }
-
     private void imageFromBitmap(Bitmap bitmap) {
         int rotationDegree = 0;
         // [START image_from_bitmap]
@@ -128,9 +100,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onSuccess(Text result) {
                                 // [START mlkit_process_text_block]
-                                String resultText = result.getText();
+                                resultText = result.getText();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-                                textView.setText("Result     " + resultText.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + pattern.matcher(resultText).matches());
+//                                textView.setText("Result     " + resultText.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + pattern.matcher(resultText).matches());
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
                                     Point[] blockCornerPoints = block.getCornerPoints();
@@ -145,6 +117,8 @@ public class MainActivity extends AppCompatActivity {
                                             Point[] elementCornerPoints = element.getCornerPoints();
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
+                                            t1.setText(resultText);
+
                                         }
                                     }
                                 }
@@ -160,4 +134,34 @@ public class MainActivity extends AppCompatActivity {
                                 });
     }
 
+    public void check(View view) {
+        number = t1.getText().toString();
+        new parsing().execute();
+        try {
+            Thread.sleep(3300);
+            // System.out.println(prasing.kl.toString());
+            printInfo(parsing.kl);
+        } catch (InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void printInfo(JSONObject kl) throws JSONException {
+
+        JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
+
+        textView.setText("Description:  " + temp.getString("Description"));
+        textView.append("\nName" + temp.get("Zone"));
+        textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
+        textView.append("\nOwner:   " + temp.getString("Owner") + "\n");
+        textView.append("\nLocation:  " + temp.getString("Location"));
+
+        System.out.println("Description:  " + temp.getString("Description") +
+                "\nName" + temp.get("Zone") +
+                "\nRegistration Year:  " + temp.getString("RegistrationDate") +
+                "\nOwner:   " + temp.getString("Owner") + "\n" +
+                "\nLocation:  " + temp.getString("Location"));
+
+    }
 }
