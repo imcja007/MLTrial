@@ -19,7 +19,7 @@ public class parsing extends AsyncTask {
 //        if (MainActivity.pattern.matcher(MainActivity.resultText).matches()) {
         try {
 
-            String url="http://in.carregistrationapi.com/api/reg.asmx/CheckIndia?RegistrationNumber="+MainActivity.number+"&username=oops2";
+          String url="http://in.carregistrationapi.com/api/reg.asmx/CheckIndia?RegistrationNumber="+MainActivity.number+"&username=Cristiano_7";
 
             //String url = "https://www.w3schools.com/xml/plant_catalog.xml";
             //HttpURLConnection htp= url;
