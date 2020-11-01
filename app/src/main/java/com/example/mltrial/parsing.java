@@ -30,6 +30,7 @@ public class parsing extends AsyncTask {
             kl = xmlToJson.toJson() ;
 //           System.out.println(kl.toString().replace("\\/","")) ;
             System.out.println("================ doInBackground COMPLETED");
+           // System.out.println(kl.toString()) ;
         } catch (IOException e) {
             e.printStackTrace();
         }

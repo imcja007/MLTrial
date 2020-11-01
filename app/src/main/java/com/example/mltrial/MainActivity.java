@@ -173,6 +173,10 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void printInfo(JSONObject kl) throws JSONException {
+
+
+
+
         try {
             JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
             //textView.setText(kl.toString());
@@ -189,8 +193,9 @@ public class MainActivity extends AppCompatActivity {
                     "\nOwner:   " + temp.getString("Owner") + "\n" +
                     "\nLocation:  " + temp.getString("Location"));
             //   System.out.println(kl.toString());
-        } catch (JSONException e) {
+        } catch (JSONException |NullPointerException e) {
             e.printStackTrace();
-        }
+        System.out.println(kl.toString());
+       }
     }
 }
