@@ -25,22 +25,15 @@ import com.google.mlkit.vision.text.TextRecognition;
 import com.google.mlkit.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 
-import org.json.JSONObject;
-
 import java.io.IOException;
 
 
 public class MainActivity extends AppCompatActivity {
 
-
-    //    public static TextView textView;
     public static String number;
-    public static String pass;
     public Button conf;
     Uri mImageUri;
-    //    static Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
     static String resultText;
-    public JSONObject temp;
     private ImageView imageView;
     private InputImage image;
     private EditText t1;
@@ -154,26 +147,4 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                 });
     }
-
-
-//    @SuppressLint("SetTextI18n")
-//    public void printInfo(JSONObject kl) throws JSONException {
-//
-//        try {
-//            temp= new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson"));
-////            textView.setText(kl.toString());
-////            textView.setMovementMethod(new ScrollingMovementMethod());
-////            textView.setText("Description:  " + temp.getString("Description"));
-////            textView.append("\nName" + temp.get("Zone"));
-////            textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
-////            textView.append("\nOwner:   " + temp.getString("Owner") + "\n");
-////            textView.append("\nLocation:  " + temp.getString("Location"));
-//
-//
-//            //   System.out.println(kl.toString());
-//        } catch (JSONException | NullPointerException e) {
-//            e.printStackTrace();
-//            System.out.println(kl.toString());
-//        }
-//    }
 }

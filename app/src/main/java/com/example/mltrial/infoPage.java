@@ -17,7 +17,6 @@ public class infoPage extends AppCompatActivity {
         setContentView(R.layout.activity_info_page);
         TextView textView = findViewById(R.id.textView);
 
-
 //The second parameter below is the default string returned if the value is not there.
         try {
             JSONObject jk = parsing.kl;

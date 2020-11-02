@@ -22,7 +22,6 @@ public class parsing extends AsyncTask {
             String url = "http://in.carregistrationapi.com/api/reg.asmx/CheckIndia?RegistrationNumber=" + MainActivity.number + "&username=Aditya123";
 
             //String url = "https://www.w3schools.com/xml/plant_catalog.xml";
-            //HttpURLConnection htp= url;
             URLConnection connection = new URL(url).openConnection();
             connection.setRequestProperty("Accept-Charset", "UTF-8");
             InputStream is = connection.getInputStream();
@@ -58,37 +57,6 @@ public class parsing extends AsyncTask {
         return kl;
     }
 
-//    @Override
-//    protected void onPostExecute(Object o) {
-//        super.onPostExecute(o);
-////        MainActivity.textView.setText("Result     " + MainActivity.abc.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + MainActivity.pattern.matcher(MainActivity.abc).matches());
-//        try {
-////            JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
-//
-////           MainActivity.textView.setText("Description:  " + temp.getString("Description"));
-////            MainActivity.textView.append("\nName" + temp.get("Zone"));
-////            MainActivity.textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
-////            MainActivity.textView.append("\nOwner:   " + temp.getString("Owner") + "\n");
-////            MainActivity.textView.append("\nLocation:  " + temp.getString("Location"));
-//
-////            MainActivity.textView.setText("Description:  " + temp.getString("Description")+
-////            ("\nName" + temp.get("Zone"))+
-////            ("\nRegistration Year:  " + temp.getString("RegistrationDate"))+
-////            ("\nOwner:   " + temp.getString("Owner") + "\n")+
-////            ("\nLocation:  " + temp.getString("Location")));
-//
-//
-//            new MainActivity().printInfo(kl);
-//            System.out.println("================ onPost SUCCESS");
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            System.out.println("================ onPost ERROR");
-//        }
-////        MainActivity.textView.setText(txt);
-////        MainActivity.textView.setText(MainActivity.number);
-//        System.out.println("================ onPost COMPLETED");
-//    }
 
 }
 
