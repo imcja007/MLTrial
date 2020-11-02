@@ -1,5 +1,6 @@
 package com.example.mltrial;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -7,6 +8,7 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.method.ScrollingMovementMethod;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,43 +38,44 @@ import java.util.regex.Pattern;
 public class MainActivity extends AppCompatActivity {
 
 
-    private ImageView imageView;
     public static TextView textView;
     public static String number;
     static Pattern pattern = Pattern.compile("[A-Z]{2}[0-9]{1,2}[A-Z]{1,2}[0-9]{1,4}");
-    private InputImage image;
     static String resultText;
+    public Button conf;
     Uri mImageUri;
-    Button btn;
+    private ImageView imageView;
+    private InputImage image;
     private EditText t1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        conf = (Button) findViewById(R.id.confirm_button);
         imageView = findViewById(R.id.image_view);
         textView = findViewById(R.id.text_display);
         t1 = findViewById(R.id.regNo);
-        btn = findViewById(R.id.confirm_button);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        conf.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                number = t1.getText().toString();
-                new parsing().execute();
-                try {
-                    Thread.sleep(3300);
-                    // System.out.println(prasing.kl.toString());
-                    printInfo(parsing.kl);
-                } catch (InterruptedException | JSONException e) {
-                    e.printStackTrace();
-                }
+                {
 
+                    number = t1.getText().toString().replaceAll("\\s", "");
+                    new parsing().execute();
+                    try {
+                        Thread.sleep(3300);
+                        // System.out.println(prasing.kl.toString());
+                        printInfo(parsing.kl);
+                    } catch (InterruptedException | JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
             }
         });
     }
-
 
     public void onChooseFile(View v) {
         CropImage.activity().start(MainActivity.this);
@@ -152,23 +155,32 @@ public class MainActivity extends AppCompatActivity {
                                 });
     }
 
-//        public void check (View view){
-////        number = t1.getText().toString();
-////        new parsing().execute();
-////        try {
-////            Thread.sleep(3300);
-////            // System.out.println(prasing.kl.toString());
-////            printInfo(parsing.kl);
-////        } catch (InterruptedException | JSONException e) {
-////            e.printStackTrace();
-////        }
-//
-//        }
 
-    public void printInfo(JSONObject kl) throws JSONException, NullPointerException {
+    public void check(View view) {
+
+        number = t1.getText().toString();
+        new parsing().execute();
+        try {
+            Thread.sleep(3300);
+            // System.out.println(prasing.kl.toString());
+            printInfo(parsing.kl);
+        } catch (InterruptedException | JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    public void printInfo(JSONObject kl) throws JSONException {
+
+
+
+
         try {
             JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
-
+            //textView.setText(kl.toString());
+            textView.setMovementMethod(new ScrollingMovementMethod());
             textView.setText("Description:  " + temp.getString("Description"));
             textView.append("\nName" + temp.get("Zone"));
             textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
@@ -180,7 +192,10 @@ public class MainActivity extends AppCompatActivity {
                     "\nRegistration Year:  " + temp.getString("RegistrationDate") +
                     "\nOwner:   " + temp.getString("Owner") + "\n" +
                     "\nLocation:  " + temp.getString("Location"));
-        } catch (Exception e) {
-        }
+            //   System.out.println(kl.toString());
+        } catch (JSONException |NullPointerException e) {
+            e.printStackTrace();
+        System.out.println(kl.toString());
+       }
     }
 }

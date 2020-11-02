@@ -29,6 +29,7 @@
         android:layout_below="@+id/confirm_button"
         android:layout_alignParentEnd="true"
         android:layout_marginTop="50dp"
+        android:scrollbars = "vertical"
         android:text="Detected text here!!"
         android:textSize="26dp" />
 
@@ -47,7 +48,6 @@
         android:layout_height="120px"
         android:layout_below="@id/capture_image"
         android:layout_marginTop="12dp"
-
         android:text="Check" />
 
 
