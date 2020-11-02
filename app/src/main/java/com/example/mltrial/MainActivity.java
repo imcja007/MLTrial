@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
     private InputImage image;
     static String resultText;
     Uri mImageUri;
+    Button btn;
     private EditText t1;
 
     @Override
@@ -52,9 +54,25 @@ public class MainActivity extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         textView = findViewById(R.id.text_display);
         t1 = findViewById(R.id.regNo);
+        btn = findViewById(R.id.confirm_button);
 
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                number = t1.getText().toString();
+                new parsing().execute();
+                try {
+                    Thread.sleep(3300);
+                    // System.out.println(prasing.kl.toString());
+                    printInfo(parsing.kl);
+                } catch (InterruptedException | JSONException e) {
+                    e.printStackTrace();
+                }
 
+            }
+        });
     }
+
 
     public void onChooseFile(View v) {
         CropImage.activity().start(MainActivity.this);
@@ -134,34 +152,35 @@ public class MainActivity extends AppCompatActivity {
                                 });
     }
 
-    public void check(View view) {
-        number = t1.getText().toString();
-        new parsing().execute();
+//        public void check (View view){
+////        number = t1.getText().toString();
+////        new parsing().execute();
+////        try {
+////            Thread.sleep(3300);
+////            // System.out.println(prasing.kl.toString());
+////            printInfo(parsing.kl);
+////        } catch (InterruptedException | JSONException e) {
+////            e.printStackTrace();
+////        }
+//
+//        }
+
+    public void printInfo(JSONObject kl) throws JSONException, NullPointerException {
         try {
-            Thread.sleep(3300);
-            // System.out.println(prasing.kl.toString());
-            printInfo(parsing.kl);
-        } catch (InterruptedException | JSONException e) {
-            e.printStackTrace();
+            JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
+
+            textView.setText("Description:  " + temp.getString("Description"));
+            textView.append("\nName" + temp.get("Zone"));
+            textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
+            textView.append("\nOwner:   " + temp.getString("Owner") + "\n");
+            textView.append("\nLocation:  " + temp.getString("Location"));
+
+            System.out.println("Description:  " + temp.getString("Description") +
+                    "\nName" + temp.get("Zone") +
+                    "\nRegistration Year:  " + temp.getString("RegistrationDate") +
+                    "\nOwner:   " + temp.getString("Owner") + "\n" +
+                    "\nLocation:  " + temp.getString("Location"));
+        } catch (Exception e) {
         }
-
-    }
-
-    public void printInfo(JSONObject kl) throws JSONException {
-
-        JSONObject temp = new JSONObject(kl.getJSONObject("Vehicle").getString("vehicleJson").toString());
-
-        textView.setText("Description:  " + temp.getString("Description"));
-        textView.append("\nName" + temp.get("Zone"));
-        textView.append("\nRegistration Year:  " + temp.getString("RegistrationDate"));
-        textView.append("\nOwner:   " + temp.getString("Owner") + "\n");
-        textView.append("\nLocation:  " + temp.getString("Location"));
-
-        System.out.println("Description:  " + temp.getString("Description") +
-                "\nName" + temp.get("Zone") +
-                "\nRegistration Year:  " + temp.getString("RegistrationDate") +
-                "\nOwner:   " + temp.getString("Owner") + "\n" +
-                "\nLocation:  " + temp.getString("Location"));
-
     }
 }
