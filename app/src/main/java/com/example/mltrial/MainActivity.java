@@ -1,5 +1,6 @@
 package com.example.mltrial;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -19,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.mlkit.vision.common.InputImage;
 import com.google.mlkit.vision.text.Text;
 import com.google.mlkit.vision.text.TextRecognition;
@@ -28,7 +30,7 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.IOException;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity<nDialog> extends AppCompatActivity {
 
     public static String number;
     public Button conf;
@@ -36,16 +38,25 @@ public class MainActivity extends AppCompatActivity {
     static String resultText;
     private ImageView imageView;
     private InputImage image;
-    private EditText t1;
+    private TextInputEditText t1;
+    ProgressDialog nDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        conf = (Button) findViewById(R.id.confirm_button);
         imageView = findViewById(R.id.image_view);
+        conf = (Button) findViewById(R.id.confirm_button);
 //        textView = findViewById(R.id.text_display);
-        t1 = findViewById(R.id.regNo);
+        t1 = (TextInputEditText)findViewById(R.id.regNo);
+//        nDialog =  new ProgressDialog(MainActivity.this);
+//        nDialog.setMessage("Loading..");
+//        nDialog.setTitle("Get Data");
+//        nDialog.setIndeterminate(false);
+//        nDialog.setCancelable(true);
+//        nDialog.dismiss();
+
 
         conf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,13 +64,16 @@ public class MainActivity extends AppCompatActivity {
                 {
 
                     number = t1.getText().toString().replaceAll("\\s", "");
+
                     new parsing().execute();
 
                     try {
-                        Thread.sleep(3300);
 
+                        Thread.sleep(3300);
+                     //   nDialog.show();
 
                         Intent i = new Intent(getBaseContext(), infoPage.class);
+                        //nDialog.dismiss();
                         startActivity(i);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -89,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);
                     imageFromBitmap(bitmap);
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -131,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
                                             Point[] elementCornerPoints = element.getCornerPoints();
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
+                                            resultText=resultText.replaceAll("\\s", "") ;
                                             t1.setText(resultText);
 
                                         }
