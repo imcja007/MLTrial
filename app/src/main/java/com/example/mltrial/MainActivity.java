@@ -148,6 +148,8 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
                                             resultText = resultText.replaceAll("\\s", "");
+                                            if(resultText.charAt(2)=='O'|| resultText.charAt(2)=='o')
+                                                     resultText = resultText.substring(0, 2)+'0'+ resultText.substring(2+ 1);
                                             t1.setText(resultText);
                                             if(pattern.matcher(resultText).matches())
                                             {
