@@ -51,10 +51,11 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Pattern pattern = Pattern.compile(pattern2);
     Matcher matcher ;
 
-
+    private static int SPLASH_SCREEN_TIME_OUT=2000;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
