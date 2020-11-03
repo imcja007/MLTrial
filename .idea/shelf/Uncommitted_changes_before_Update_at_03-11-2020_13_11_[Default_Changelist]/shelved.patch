@@ -1,0 +1,176 @@
+Index: app/src/main/java/com/example/mltrial/MainActivity.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.mltrial;\r\n\r\nimport android.app.ProgressDialog;\r\nimport android.content.Intent;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.Point;\r\nimport android.graphics.Rect;\r\nimport android.net.Uri;\r\nimport android.os.Bundle;\r\nimport android.provider.MediaStore;\r\nimport android.view.View;\r\nimport android.widget.Button;\r\nimport android.widget.EditText;\r\nimport android.widget.ImageView;\r\nimport android.widget.Toast;\r\n\r\nimport androidx.annotation.NonNull;\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport com.google.android.gms.tasks.OnFailureListener;\r\nimport com.google.android.gms.tasks.OnSuccessListener;\r\nimport com.google.android.gms.tasks.Task;\r\nimport com.google.android.material.textfield.TextInputEditText;\r\nimport com.google.mlkit.vision.common.InputImage;\r\nimport com.google.mlkit.vision.text.Text;\r\nimport com.google.mlkit.vision.text.TextRecognition;\r\nimport com.google.mlkit.vision.text.TextRecognizer;\r\nimport com.theartofdev.edmodo.cropper.CropImage;\r\n\r\nimport java.io.IOException;\r\n\r\n\r\npublic class MainActivity<nDialog> extends AppCompatActivity {\r\n\r\n    public static String number;\r\n    public Button conf;\r\n    Uri mImageUri;\r\n    static String resultText;\r\n    private ImageView imageView;\r\n    private InputImage image;\r\n    private TextInputEditText t1;\r\n    ProgressDialog nDialog;\r\n\r\n\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_main);\r\n        imageView = findViewById(R.id.image_view);\r\n        conf = (Button) findViewById(R.id.confirm_button);\r\n//        textView = findViewById(R.id.text_display);\r\n        t1 = (TextInputEditText)findViewById(R.id.regNo);\r\n//        nDialog =  new ProgressDialog(MainActivity.this);\r\n//        nDialog.setMessage(\"Loading..\");\r\n//        nDialog.setTitle(\"Get Data\");\r\n//        nDialog.setIndeterminate(false);\r\n//        nDialog.setCancelable(true);\r\n//        nDialog.dismiss();\r\n\r\n\r\n        conf.setOnClickListener(new View.OnClickListener() {\r\n            @Override\r\n            public void onClick(View view) {\r\n                {\r\n\r\n                    number = t1.getText().toString().replaceAll(\"\\\\s\", \"\");\r\n\r\n                    new parsing().execute();\r\n\r\n                    try {\r\n\r\n                        Thread.sleep(3300);\r\n                     //   nDialog.show();\r\n\r\n                        Intent i = new Intent(getBaseContext(), infoPage.class);\r\n                        //nDialog.dismiss();\r\n                        startActivity(i);\r\n                    } catch (InterruptedException e) {\r\n                        e.printStackTrace();\r\n                    }\r\n\r\n                }\r\n            }\r\n        });\r\n    }\r\n\r\n    public void onChooseFile(View v) {\r\n        CropImage.activity().start(MainActivity.this);\r\n\r\n    }\r\n\r\n\r\n    protected void onActivityResult(int requestCode, int resultCode, Intent data) {\r\n        super.onActivityResult(requestCode, resultCode, data);\r\n        CropImage.ActivityResult result = CropImage.getActivityResult(data);\r\n        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {\r\n\r\n\r\n            if (resultCode == RESULT_OK) {\r\n                mImageUri = result.getUri();\r\n                imageView.setImageURI(mImageUri);\r\n\r\n                try {\r\n                    Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), mImageUri);\r\n                    imageFromBitmap(bitmap);\r\n\r\n                } catch (IOException e) {\r\n                    e.printStackTrace();\r\n                }\r\n            }\r\n        } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {\r\n            Exception e = result.getError();\r\n            Toast.makeText(this, \"Possible error is :  \" + e, Toast.LENGTH_SHORT);\r\n\r\n        }\r\n    }\r\n\r\n\r\n    private void imageFromBitmap(Bitmap bitmap) {\r\n        int rotationDegree = 0;\r\n        // [START image_from_bitmap]\r\n        image = InputImage.fromBitmap(bitmap, rotationDegree);\r\n        // [END image_from_bitmap]\r\n\r\n        TextRecognizer recognizer = TextRecognition.getClient();\r\n        Task<Text> result =\r\n                recognizer.process(image)\r\n                        .addOnSuccessListener(new OnSuccessListener<Text>() {\r\n                            @Override\r\n                            public void onSuccess(Text result) {\r\n                                // [START mlkit_process_text_block]\r\n                                resultText = result.getText();\r\n                                System.out.println(\"RESULT TEXT=====================\" + resultText);\r\n//                                textView.setText(\"Result     \" + resultText.replaceAll(\"[^a-zA-Z0-9]\", \"\") + \"\\nRegex:  \" + pattern.matcher(resultText).matches());\r\n                                for (Text.TextBlock block : result.getTextBlocks()) {\r\n                                    String blockText = block.getText();\r\n                                    Point[] blockCornerPoints = block.getCornerPoints();\r\n                                    Rect blockFrame = block.getBoundingBox();\r\n                                    for (Text.Line line : block.getLines()) {\r\n                                        String lineText = line.getText();\r\n                                        System.out.println(\"Line TEXT=====================\" + lineText);\r\n                                        Point[] lineCornerPoints = line.getCornerPoints();\r\n                                        Rect lineFrame = line.getBoundingBox();\r\n                                        for (Text.Element element : line.getElements()) {\r\n                                            String elementText = element.getText();\r\n                                            Point[] elementCornerPoints = element.getCornerPoints();\r\n                                            Rect elementFrame = element.getBoundingBox();\r\n                                            System.out.println(\"elemnt TEXT=====================\" + elementText);\r\n                                            resultText=resultText.replaceAll(\"\\\\s\", \"\") ;\r\n                                            t1.setText(resultText);\r\n\r\n                                        }\r\n                                    }\r\n                                }\r\n                            }\r\n                        })\r\n                        .addOnFailureListener(\r\n                                new OnFailureListener() {\r\n                                    @Override\r\n                                    public void onFailure(@NonNull Exception e) {\r\n                                        // Task failed with an exception\r\n                                        // ...\r\n                                    }\r\n                                });\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/mltrial/MainActivity.java	(revision a6a14bdb05e80b7e7065e7be89d8380591e8d5fe)
++++ app/src/main/java/com/example/mltrial/MainActivity.java	(date 1604389246374)
+@@ -12,6 +12,7 @@
+ import android.widget.Button;
+ import android.widget.EditText;
+ import android.widget.ImageView;
++import android.widget.ProgressBar;
+ import android.widget.Toast;
+ 
+ import androidx.annotation.NonNull;
+@@ -39,7 +40,6 @@
+     private ImageView imageView;
+     private InputImage image;
+     private TextInputEditText t1;
+-    ProgressDialog nDialog;
+ 
+ 
+     @Override
+@@ -50,12 +50,6 @@
+         conf = (Button) findViewById(R.id.confirm_button);
+ //        textView = findViewById(R.id.text_display);
+         t1 = (TextInputEditText)findViewById(R.id.regNo);
+-//        nDialog =  new ProgressDialog(MainActivity.this);
+-//        nDialog.setMessage("Loading..");
+-//        nDialog.setTitle("Get Data");
+-//        nDialog.setIndeterminate(false);
+-//        nDialog.setCancelable(true);
+-//        nDialog.dismiss();
+ 
+ 
+         conf.setOnClickListener(new View.OnClickListener() {
+@@ -64,8 +58,7 @@
+                 {
+ 
+                     number = t1.getText().toString().replaceAll("\\s", "");
+-
+-                    new parsing().execute();
++                   new parsing().execute();
+ 
+                     try {
+ 
+@@ -73,7 +66,7 @@
+                      //   nDialog.show();
+ 
+                         Intent i = new Intent(getBaseContext(), infoPage.class);
+-                        //nDialog.dismiss();
++
+                         startActivity(i);
+                     } catch (InterruptedException e) {
+                         e.printStackTrace();
+Index: app/src/main/java/com/example/mltrial/infoPage.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.mltrial;\r\n\r\nimport android.annotation.SuppressLint;\r\nimport android.graphics.Bitmap;\r\nimport android.graphics.BitmapFactory;\r\nimport android.os.Bundle;\r\nimport android.text.method.ScrollingMovementMethod;\r\nimport android.widget.ImageView;\r\nimport android.widget.TextView;\r\n\r\nimport androidx.appcompat.app.AppCompatActivity;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.InputStream;\r\nimport java.net.URL;\r\n\r\npublic class infoPage extends AppCompatActivity {\r\n\r\n    @SuppressLint(\"SetTextI18n\")\r\n    @Override\r\n    protected void onCreate(Bundle savedInstanceState) {\r\n        super.onCreate(savedInstanceState);\r\n        setContentView(R.layout.activity_info_page);\r\n        TextView model = findViewById(R.id.model);\r\n        TextView regDate = findViewById(R.id.regDate);\r\n        TextView owner = findViewById(R.id.owner);\r\n        TextView location = findViewById(R.id.location);\r\n        ImageView i = (ImageView)findViewById(R.id.image);\r\n\r\n//The second parameter below is the default string returned if the value is not there.\r\n        try {\r\n            JSONObject jk = parsing.kl;\r\n            //JSONObject temp = new JSONObject(jk.getJSONObject(\"Vehicle\").getString(\"vehicleJson\"));\r\n\r\n          //  textView.setMovementMethod(new ScrollingMovementMethod());\r\n//\r\n//            System.out.println(\"=====================  infoPage\");\r\n//\r\n//            System.out.println(\"Description:  \" + temp.getString(\"Description\") +\r\n//                    \"\\nRegistration Year:  \" + temp.getString(\"RegistrationDate\") +\r\n//                    \"\\nOwner:   \" + temp.getString(\"Owner\") + \"\\n\" +\r\n//                    \"\\nLocation:  \" + temp.getString(\"Location\"));\r\n//\r\n//            textView.setText(\"Description:  \" + temp.getString(\"Description\") +\r\n//                    \"\\nRegistration Year:  \" + temp.getString(\"RegistrationDate\") +\r\n//                    \"\\nOwner:   \" + temp.getString(\"Owner\") + \"\\n\" +\r\n//                    \"\\nLocation:  \" + temp.getString(\"Location\"));\r\n\r\n//\r\n//            model.setText(\"Description:  \" + temp.getString(\"Description\") );\r\n//            regDate.setText(\"Registration Year:  \" + temp.getString(\"RegistrationDate\"));\r\n//            owner.setText(\"Owner:   \" + temp.getString(\"Owner\"));\r\n//            location.setText(\"Location:  \" + temp.getString(\"Location\"));\r\n           // Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl).getContent());\r\n        //    i.setImageBitmap(bitmap);\r\n\r\n\r\n        } catch (NullPointerException e) {\r\n            e.printStackTrace();\r\n            System.out.println(\"Catch block===========\\n\" + parsing.kl.toString());\r\n            model.setText(\"Description:  \" + \"?????????????????\");\r\n            regDate.setText(\"Registration Year:  \" + \"?????????????????\");\r\n            owner.setText(\"Owner:   \" + \"?????????????????\");\r\n            location.setText(\"Location:  \" + \"?????????????????\");\r\n        }\r\n\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/mltrial/infoPage.java	(revision a6a14bdb05e80b7e7065e7be89d8380591e8d5fe)
++++ app/src/main/java/com/example/mltrial/infoPage.java	(date 1604386550443)
+@@ -31,7 +31,7 @@
+ 
+ //The second parameter below is the default string returned if the value is not there.
+         try {
+-            JSONObject jk = parsing.kl;
++            JSONObject temp = parsing.kl;
+             //JSONObject temp = new JSONObject(jk.getJSONObject("Vehicle").getString("vehicleJson"));
+ 
+           //  textView.setMovementMethod(new ScrollingMovementMethod());
+@@ -49,17 +49,17 @@
+ //                    "\nLocation:  " + temp.getString("Location"));
+ 
+ //
+-//            model.setText("Description:  " + temp.getString("Description") );
+-//            regDate.setText("Registration Year:  " + temp.getString("RegistrationDate"));
+-//            owner.setText("Owner:   " + temp.getString("Owner"));
+-//            location.setText("Location:  " + temp.getString("Location"));
++            model.setText("Description:  " + temp.getString("Model") );
++            regDate.setText("Registration Year:  " + temp.getString("Reg Date"));
++            owner.setText("Owner:   " + temp.getString("Owner Name"));
++            location.setText("Registering Authority:  " + temp.getString("Registering Authority"));
+            // Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl).getContent());
+         //    i.setImageBitmap(bitmap);
+ 
+ 
+-        } catch (NullPointerException e) {
++        } catch (NullPointerException | JSONException e) {
+             e.printStackTrace();
+-            System.out.println("Catch block===========\n" + parsing.kl.toString());
++           // System.out.println("Catch block===========\n" + parsing.kl.toString());
+             model.setText("Description:  " + "?????????????????");
+             regDate.setText("Registration Year:  " + "?????????????????");
+             owner.setText("Owner:   " + "?????????????????");
+Index: app/src/main/java/com/example/mltrial/parsing.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.mltrial;\r\n\r\nimport android.os.AsyncTask;\r\n\r\nimport org.json.JSONException;\r\nimport org.json.JSONObject;\r\n\r\nimport java.io.BufferedInputStream;\r\nimport java.io.BufferedReader;\r\nimport java.io.IOException;\r\nimport java.io.InputStream;\r\nimport java.io.InputStreamReader;\r\nimport java.net.HttpURLConnection;\r\nimport java.net.URL;\r\nimport java.net.URLConnection;\r\n\r\nimport fr.arnaudguyon.xmltojsonlib.XmlToJson;\r\n\r\npublic class parsing extends AsyncTask {\r\n    static JSONObject kl;\r\n\r\n    protected JSONObject doInBackground(Object[] objects) {\r\n\r\n//        if (MainActivity.pattern.matcher(MainActivity.resultText).matches()) {\r\n        try {\r\n\r\n            //String url = \"http://in.carregistrationapi.com/api/reg.asmx/CheckIndia?RegistrationNumber=\" + MainActivity.number + \"&username=Aditya123\";\r\n            String url2=\" https://shrouded-falls-48764.herokuapp.com/vehicle-info/\"+MainActivity.number ;\r\n            //String url = \"https://www.w3schools.com/xml/plant_catalog.xml\";\r\n//            URLConnection connection = new URL(url).openConnection();\r\n//            connection.setRequestProperty(\"Accept-Charset\", \"UTF-8\");\r\n//            connection.setRequestProperty(\"API-Key\",\"29e683451a914df882eaa2f7268a21a4\");\r\n//            InputStream is = connection.getInputStream();\r\n            URL url = new URL(url2);\r\n            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();\r\n            urlConnection.setRequestMethod(\"GET\");\r\n            urlConnection.setRequestProperty(\"API-Key\",\"29e683451a914df882eaa2f7268a21a4\");\r\n            int statusCode = urlConnection.getResponseCode();\r\n            JSONObject kl=new JSONObject() ;\r\n            System.out.println(\"Status code is   \" +statusCode);\r\n            if (statusCode ==  200) {\r\n                InputStream it = new BufferedInputStream(urlConnection.getInputStream());\r\n                InputStreamReader read = new InputStreamReader(it);\r\n                BufferedReader buff = new BufferedReader(read);\r\n                StringBuilder dta = new StringBuilder();\r\n                String chunks ;\r\n                while((chunks = buff.readLine()) != null)\r\n                {\r\n                    dta.append(chunks);\r\n                }\r\n              System.out.println(\"Sting Builder is    \"+dta);\r\n                kl=new JSONObject(dta.toString()) ;\r\n            }\r\n            else\r\n            {\r\n                kl=null ;\r\n            }\r\n//            String isp = \"<Vehicle xmlns:xsd=\\\"http://www.w3.org/2001/XMLSchema\\\" xmlns:xsi=\\\"http://www.w3.org/2001/XMLSchema-instance\\\" xmlns=\\\"http://regcheck.org.uk\\\">\\n\" +\r\n//                    \"<vehicleJson>{ \\\"Description\\\": \\\"HONDAMCYSC/ACTIVA 3G EAS KS CBS BS3\\\", \\\"RegistrationYear\\\": \\\"2016\\\", \\\"CarMake\\\": { \\\"CurrentTextValue\\\": \\\"HONDAMCYSC\\\" }, \\\"CarModel\\\": { \\\"CurrentTextValue\\\": \\\"ACTIVA 3G EAS KS CBS BS3\\\" }, \\\"EngineSize\\\": { \\\"CurrentTextValue\\\": \\\"\\\" }, \\\"MakeDescription\\\": { \\\"CurrentTextValue\\\": \\\"HONDAMCYSC\\\" }, \\\"ModelDescription\\\": { \\\"CurrentTextValue\\\": \\\"ACTIVA 3G EAS KS CBS BS3\\\" }, \\\"VechileIdentificationNumber\\\": \\\"\\\", \\\"EngineNumber\\\": \\\"\\\", \\\"FuelType\\\": { \\\"CurrentTextValue\\\": \\\"\\\" }, \\\"RegistrationDate\\\": \\\"27/10/2016\\\", \\\"Owner\\\": \\\"*U*E*D*A *A*N\\\", \\\"Fitness\\\": \\\"\\\", \\\"Insurance\\\": \\\"NA\\\", \\\"Location\\\": \\\"BHOPAL RTO, MADHYA PRADESH\\\", \\\"ImageUrl\\\": \\\"http://in.carregistrationapi.com/image.aspx/@SE9OREFNQ1lTQy9BQ1RJVkEgM0cgRUFTIEtTIENCUyBCUzM=\\\" }</vehicleJson>\\n\" +\r\n//                    \"<vehicleData>\\n\" +\r\n//                    \"<Description>HONDAMCYSC/ACTIVA 3G EAS KS CBS BS3</Description>\\n\" +\r\n//                    \"<RegistrationYear>2016</RegistrationYear>\\n\" +\r\n//                    \"<CarMake>\\n\" +\r\n//                    \"<CurrentTextValue>HONDAMCYSC</CurrentTextValue>\\n\" +\r\n//                    \"</CarMake>\\n\" +\r\n//                    \"<CarModel>ACTIVA 3G EAS KS CBS BS3</CarModel>\\n\" +\r\n//                    \"</vehicleData>\\n\" +\r\n//                    \"</Vehicle>\";\r\n//\r\n//            InputStream is =new ByteArrayInputStream(isp.getBytes(\"UTF-8\"));\r\n//\r\n//            XmlToJson xmlToJson = new XmlToJson.Builder(is, \"UTF-8\").build();\r\n//            kl = xmlToJson.toJson();\r\n           // JSONObject kl=new JSONObject(is.toString()) ;\r\n\r\n//           System.out.println(kl.toString().replace(\"\\\\/\",\"\")) ;\r\n            System.out.println(\"================ doInBackground COMPLETED\");\r\n//            System.out.println(\"++++++++++++++++++++\" + kl.toString());\r\n\r\n        } catch (IOException | JSONException e) {\r\n            e.printStackTrace();\r\n        }\r\n\r\n//        } else {\r\n//          System.out.println(\"INVALID NUMBER PLEASE TYPE\");\r\n//\r\n//        }\r\n        System.out.println(kl);\r\n        return kl;\r\n    }\r\n\r\n\r\n}\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/java/com/example/mltrial/parsing.java	(revision a6a14bdb05e80b7e7065e7be89d8380591e8d5fe)
++++ app/src/main/java/com/example/mltrial/parsing.java	(date 1604386605135)
+@@ -36,25 +36,23 @@
+             urlConnection.setRequestMethod("GET");
+             urlConnection.setRequestProperty("API-Key","29e683451a914df882eaa2f7268a21a4");
+             int statusCode = urlConnection.getResponseCode();
+-            JSONObject kl=new JSONObject() ;
++
++            StringBuilder dta = new StringBuilder();
+             System.out.println("Status code is   " +statusCode);
+             if (statusCode ==  200) {
+                 InputStream it = new BufferedInputStream(urlConnection.getInputStream());
+                 InputStreamReader read = new InputStreamReader(it);
+                 BufferedReader buff = new BufferedReader(read);
+-                StringBuilder dta = new StringBuilder();
++
+                 String chunks ;
+                 while((chunks = buff.readLine()) != null)
+                 {
+                     dta.append(chunks);
+                 }
+-              System.out.println("Sting Builder is    "+dta);
+-                kl=new JSONObject(dta.toString()) ;
+-            }
+-            else
+-            {
+-                kl=null ;
+-            }
++             // System.out.println("Sting Builder is    "+dta);
++
++            }
++            kl=new JSONObject(dta.toString()) ;
+ //            String isp = "<Vehicle xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://regcheck.org.uk\">\n" +
+ //                    "<vehicleJson>{ \"Description\": \"HONDAMCYSC/ACTIVA 3G EAS KS CBS BS3\", \"RegistrationYear\": \"2016\", \"CarMake\": { \"CurrentTextValue\": \"HONDAMCYSC\" }, \"CarModel\": { \"CurrentTextValue\": \"ACTIVA 3G EAS KS CBS BS3\" }, \"EngineSize\": { \"CurrentTextValue\": \"\" }, \"MakeDescription\": { \"CurrentTextValue\": \"HONDAMCYSC\" }, \"ModelDescription\": { \"CurrentTextValue\": \"ACTIVA 3G EAS KS CBS BS3\" }, \"VechileIdentificationNumber\": \"\", \"EngineNumber\": \"\", \"FuelType\": { \"CurrentTextValue\": \"\" }, \"RegistrationDate\": \"27/10/2016\", \"Owner\": \"*U*E*D*A *A*N\", \"Fitness\": \"\", \"Insurance\": \"NA\", \"Location\": \"BHOPAL RTO, MADHYA PRADESH\", \"ImageUrl\": \"http://in.carregistrationapi.com/image.aspx/@SE9OREFNQ1lTQy9BQ1RJVkEgM0cgRUFTIEtTIENCUyBCUzM=\" }</vehicleJson>\n" +
+ //                    "<vehicleData>\n" +
+@@ -79,13 +77,14 @@
+ 
+         } catch (IOException | JSONException e) {
+             e.printStackTrace();
++            System.out.println(e.getMessage()) ;
+         }
+ 
+ //        } else {
+ //          System.out.println("INVALID NUMBER PLEASE TYPE");
+ //
+ //        }
+-        System.out.println(kl);
++       // System.out.println(kl.toString()) ;
+         return kl;
+     }
+ 
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- .idea/inspectionProfiles/Project_Default.xml	(date 1604389027414)
++++ .idea/inspectionProfiles/Project_Default.xml	(date 1604389027414)
+@@ -0,0 +1,10 @@
++<component name="InspectionProjectProfileManager">
++  <profile version="1.0">
++    <option name="myName" value="Project Default" />
++    <inspection_tool class="ConstantConditions" enabled="true" level="WARNING" enabled_by_default="true">
++      <option name="SUGGEST_NULLABLE_ANNOTATIONS" value="false" />
++      <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="false" />
++    </inspection_tool>
++    <inspection_tool class="Deprecation" enabled="false" level="WARNING" enabled_by_default="false" />
++  </profile>
++</component>
+\ No newline at end of file

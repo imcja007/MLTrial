@@ -2,6 +2,7 @@ package com.example.mltrial;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,7 @@ public class infoPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MainActivity.nDialog.dismiss();
         setContentView(R.layout.activity_info_page);
 //        TextView model = findViewById(R.id.model);
 //        TextView regDate = findViewById(R.id.regDate);

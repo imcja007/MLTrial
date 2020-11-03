@@ -95,11 +95,18 @@
     <!--        android:text="Engine Number"-->
     <!--        android:textSize="24sp" />-->
 
-    <TextView
-        android:id="@+id/info"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="INFO HERE!!"
 
-        android:textSize="30sp" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="INFO HERE!!"
+
+            android:textSize="30sp" />
+    </ScrollView>
 </RelativeLayout>

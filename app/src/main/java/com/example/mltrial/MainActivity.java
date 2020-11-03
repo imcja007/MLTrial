@@ -1,6 +1,7 @@
 package com.example.mltrial;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
@@ -11,6 +12,8 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,6 +30,8 @@ import com.google.mlkit.vision.text.TextRecognizer;
 import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity<nDialog> extends AppCompatActivity {
@@ -36,9 +41,15 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Uri mImageUri;
     static String resultText;
     private ImageView imageView;
+    TextView warn ;
     private InputImage image;
     private TextInputEditText t1;
-    ProgressDialog nDialog;
+    static ProgressDialog nDialog;
+     ProgressBar pgsBar ;
+     Context context=MainActivity.this;
+     String pattern2="[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}" ;
+    Pattern pattern = Pattern.compile(pattern2);
+    Matcher matcher ;
 
 
     @Override
@@ -48,34 +59,27 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
         t1 = findViewById(R.id.regNo);
-//        nDialog =  new ProgressDialog(MainActivity.this);
-//        nDialog.setMessage("Loading..");
-//        nDialog.setTitle("Get Data");
-//        nDialog.setIndeterminate(false);
-//        nDialog.setCancelable(true);
-//        nDialog.dismiss();
+        warn=findViewById(R.id.warn);
 
-
+     //   pgsBar = (ProgressBar) findViewById(R.id.pBar);
+        nDialog =  new ProgressDialog(MainActivity.this);
+        nDialog.setMessage("Loading..");
+        nDialog.setTitle("Get Data");
+        nDialog.setIndeterminate(false);
+        nDialog.setCancelable(true);
+        nDialog.dismiss();
+        Toast.makeText(MainActivity.this, "This is my Toast message!",
+                Toast.LENGTH_LONG);
         conf.setOnClickListener(new View.OnClickListener() {
             @Override
+
+
             public void onClick(View view) {
                 {
-
                     number = t1.getText().toString().replaceAll("\\s", "");
-
-                    new parsing().execute();
-
-                    try {
-
-                        Thread.sleep(3300);
-                        //   nDialog.show();
-
-                        Intent i = new Intent(getBaseContext(), infoPage.class);
-                        //nDialog.dismiss();
-                        startActivity(i);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
+                  //  nDialog.show();
+                    new parsing(context).execute();
+                    t1.setText("");
 
                 }
             }
@@ -145,6 +149,19 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                             System.out.println("elemnt TEXT=====================" + elementText);
                                             resultText = resultText.replaceAll("\\s", "");
                                             t1.setText(resultText);
+                                            if(pattern.matcher(resultText).matches())
+                                            {
+                                                number=resultText ;
+                                                new parsing(context).execute() ;
+                                            }
+                                            else{
+                                                warn.setText("Cant recognise registration number");
+
+                                            }
+
+
+                                            Toast.makeText(MainActivity.this, "This is my Toast message!",
+                                                    Toast.LENGTH_LONG);
 
                                         }
                                     }

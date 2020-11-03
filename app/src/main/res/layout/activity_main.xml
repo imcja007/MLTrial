@@ -18,6 +18,7 @@
     <!--        android:textSize="26dp" />-->
 
 
+
     <ImageView
         android:id="@+id/image_view"
         android:layout_width="350dp"
@@ -81,6 +82,27 @@
         app:iconPadding="15dp"
         app:iconSize="30dp" />
 
+    <ProgressBar
+        android:id="@+id/pBar"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="171dp"
+        android:layout_height="86dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="118dp"
+        android:layout_marginBottom="315dp"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/warn"
+        android:layout_width="265dp"
+        android:layout_height="32dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="114dp"
+        android:layout_marginBottom="236dp"
+        android:text="" />
     <!--    <ProgressBar-->
     <!--        android:id="@+id/progress_loader"-->
     <!--        style="?android:attr/progressBarStyle"-->
