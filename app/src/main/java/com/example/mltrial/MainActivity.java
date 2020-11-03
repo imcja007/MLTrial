@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -47,9 +46,8 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         imageView = findViewById(R.id.image_view);
-        conf = (Button) findViewById(R.id.confirm_button);
-//        textView = findViewById(R.id.text_display);
-        t1 = (TextInputEditText)findViewById(R.id.regNo);
+        conf = findViewById(R.id.confirm_button);
+        t1 = findViewById(R.id.regNo);
 //        nDialog =  new ProgressDialog(MainActivity.this);
 //        nDialog.setMessage("Loading..");
 //        nDialog.setTitle("Get Data");
@@ -70,7 +68,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                     try {
 
                         Thread.sleep(3300);
-                     //   nDialog.show();
+                        //   nDialog.show();
 
                         Intent i = new Intent(getBaseContext(), infoPage.class);
                         //nDialog.dismiss();
@@ -131,7 +129,6 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                 // [START mlkit_process_text_block]
                                 resultText = result.getText();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-//                                textView.setText("Result     " + resultText.replaceAll("[^a-zA-Z0-9]", "") + "\nRegex:  " + pattern.matcher(resultText).matches());
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
                                     Point[] blockCornerPoints = block.getCornerPoints();
@@ -146,7 +143,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                             Point[] elementCornerPoints = element.getCornerPoints();
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
-                                            resultText=resultText.replaceAll("\\s", "") ;
+                                            resultText = resultText.replaceAll("\\s", "");
                                             t1.setText(resultText);
 
                                         }
