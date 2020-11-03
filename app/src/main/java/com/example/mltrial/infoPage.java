@@ -1,8 +1,10 @@
 package com.example.mltrial;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,15 +20,17 @@ public class infoPage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         MainActivity.nDialog.dismiss();
         setContentView(R.layout.activity_info_page);
-//        TextView model = findViewById(R.id.model);
-//        TextView regDate = findViewById(R.id.regDate);
-//        TextView owner = findViewById(R.id.owner);
-//        TextView location = findViewById(R.id.location);
-//        TextView engine = findViewById(R.id.engine);
-//        TextView insurance = findViewById(R.id.insurance);
-//        TextView chassis = findViewById(R.id.chassis);
-//        TextView fuel = findViewById(R.id.fuel);
+        TextView model = findViewById(R.id.model);
+        TextView regDate = findViewById(R.id.regDate);
+        TextView owner = findViewById(R.id.owner);
+        TextView regno = findViewById(R.id.regno);
+        TextView location = findViewById(R.id.location);
+        TextView engine = findViewById(R.id.engine);
+        TextView insurance = findViewById(R.id.insurance);
+        TextView chassis = findViewById(R.id.chassis);
+        TextView fuel = findViewById(R.id.fuel);
         TextView info = findViewById(R.id.info);
+        Button btn = findViewById(R.id.btn);
 
 
 //The second parameter below is the default string returned if the value is not there.
@@ -37,32 +41,35 @@ public class infoPage extends AppCompatActivity {
 
 
 //
-            info.setText("Model:  " + temp.getString("Model") +
-                    "\n\nRegistration Date:  " + temp.getString("Reg Date") +
-                    "\n\nOwner:   " + temp.getString("Owner Name") +
-                    "\n\nRegisteration Number:   " + temp.getString("Registeration Number") +
-                    "\n\nRegistering Authority:  " + temp.getString("Registering Authority") +
-                    "\n\nChassis Number:  " + temp.getString("Chassis Number") +
-                    "\n\nEngine Number:  " + temp.getString("Engine Number") +
-                    "\n\nInsurance expiry:  " + temp.getString("Insurance expiry"));
+//            info.setText("Model:  " + temp.getString("Model") +
+//                    "\n\nRegistration Date:  " + temp.getString("Reg Date") +
+//                    "\n\nOwner:   " + temp.getString("Owner Name") +
+//                    "\n\nRegisteration Number:   " + temp.getString("Registeration Number") +
+//                    "\n\nRegistering Authority:  " + temp.getString("Registering Authority") +
+//                    "\n\nFuel Type:  " + temp.getString("Fuel Type") +
+//                    "\n\nChassis Number:  " + temp.getString("Chassis Number") +
+//                    "\n\nEngine Number:  " + temp.getString("Engine Number") +
+//                    "\n\nInsurance expiry:  " + temp.getString("Insurance expiry"));
 
             System.out.println("Model:  " + temp.getString("Model") +
                     "\n\nRegistration Date:  " + temp.getString("Reg Date") +
                     "\n\nOwner:   " + temp.getString("Owner Name") +
                     "\n\nRegisteration Number:   " + temp.getString("Registeration Number") +
                     "\n\nRegistering Authority:  " + temp.getString("Registering Authority") +
+                    "\n\nFuel Type:  " + temp.getString("Fuel Type") +
                     "\n\nChassis Number:  " + temp.getString("Chassis Number") +
                     "\n\nEngine Number:  " + temp.getString("Engine Number") +
                     "\n\nInsurance expiry:  " + temp.getString("Insurance expiry"));
 
-//            fuel.setText("Fuel Type  " + temp.getString("Fuel Type"));            model.setText("Model:  " + temp.getString("Model") );
-//            regDate.setText("Registration Date:  " + temp.getString("Reg Date"));
-//            owner.setText("Owner:   " + temp.getString("Owner Name"));
-//            location.setText("Registering Authority:  " + temp.getString("Registering Authority"));
-//            chassis.setText("Chassis Number  " + temp.getString("Chassis Number"));
-//            engine.setText("Engine Number  " + temp.getString("Engine Number"));
-//            insurance.setText("Insurance expiry  " + temp.getString("Insurance expiry"));
-//            fuel.setText("Fuel Type  " + temp.getString("Fuel Type"));
+            model.setText("Model:  " + temp.getString("Model"));
+            regDate.setText("Registration Date:  " + temp.getString("Reg Date"));
+            regno.setText("Registration Number:  " + temp.getString("Registeration Number"));
+            owner.setText("Owner:   " + temp.getString("Owner Name"));
+            location.setText("Registering Authority:  " + temp.getString("Registering Authority"));
+            chassis.setText("Chassis Number:  " + temp.getString("Chassis Number"));
+            engine.setText("Engine Number:  " + temp.getString("Engine Number"));
+            insurance.setText("Insurance expiry  " + temp.getString("Insurance expiry"));
+            fuel.setText("Fuel Type:  " + temp.getString("Fuel Type"));
 
 
         } catch (NullPointerException | JSONException e) {
@@ -71,5 +78,10 @@ public class infoPage extends AppCompatActivity {
             info.setText("Ehhh Something's wrong");
         }
 
+    }
+
+    public void back(View view) {
+        Intent i = new Intent(this, MainActivity.class);
+        this.startActivity(i);
     }
 }
