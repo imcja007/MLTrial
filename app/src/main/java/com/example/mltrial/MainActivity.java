@@ -41,15 +41,15 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Uri mImageUri;
     static String resultText;
     private ImageView imageView;
-    TextView warn ;
+    TextView warn;
     private InputImage image;
     private TextInputEditText t1;
     static ProgressDialog nDialog;
-     ProgressBar pgsBar ;
-     Context context=MainActivity.this;
-     String pattern2="[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}" ;
+    ProgressBar pgsBar;
+    Context context = MainActivity.this;
+    String pattern2 = "[A-Z]{2}[0-9]{2}[A-Z]{2}[0-9]{4}";
     Pattern pattern = Pattern.compile(pattern2);
-    Matcher matcher ;
+    Matcher matcher;
 
     private static int SPLASH_SCREEN_TIME_OUT=2000;
     @Override
@@ -60,12 +60,11 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
         t1 = findViewById(R.id.regNo);
-        warn=findViewById(R.id.warn);
 
-     //   pgsBar = (ProgressBar) findViewById(R.id.pBar);
-        nDialog =  new ProgressDialog(MainActivity.this);
-        nDialog.setMessage("Loading..");
-        nDialog.setTitle("Get Data");
+        //   pgsBar = (ProgressBar) findViewById(R.id.pBar);
+        nDialog = new ProgressDialog(MainActivity.this);
+        nDialog.setMessage("Sabr rakhlo bhai thoda..");
+        nDialog.setTitle("Fetching Data");
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(true);
         nDialog.dismiss();
@@ -77,10 +76,18 @@ public class MainActivity<nDialog> extends AppCompatActivity {
 
             public void onClick(View view) {
                 {
-                    number = t1.getText().toString().replaceAll("\\s", "");
-                  //  nDialog.show();
-                    new parsing(context).execute();
-                    t1.setText("");
+//                    number = t1.getText().toString().replaceAll("\\s", "");
+//                    new parsing(context).execute();
+//                    t1.setText("");
+
+                    number = t1.getText().toString().replaceAll("\\s", "").trim().toUpperCase();
+                    if (pattern.matcher(number).matches()) {
+                        new parsing(context).execute();
+                        t1.setText("");
+                        imageView.setImageBitmap(null);
+                    } else {
+                        Toast.makeText(MainActivity.this, "Ahhh..Please check your number", Toast.LENGTH_LONG).show();
+                    }
 
                 }
             }
@@ -132,7 +139,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                             @Override
                             public void onSuccess(Text result) {
                                 // [START mlkit_process_text_block]
-                                resultText = result.getText();
+                                resultText = result.getText().trim();
                                 System.out.println("RESULT TEXT=====================" + resultText);
                                 for (Text.TextBlock block : result.getTextBlocks()) {
                                     String blockText = block.getText();
@@ -149,22 +156,22 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                             Rect elementFrame = element.getBoundingBox();
                                             System.out.println("elemnt TEXT=====================" + elementText);
                                             resultText = resultText.replaceAll("\\s", "");
-                                            if(resultText.charAt(2)=='O'|| resultText.charAt(2)=='o')
-                                                     resultText = resultText.substring(0, 2)+'0'+ resultText.substring(2+ 1);
+                                            resultText = resultText.replaceAll("IND", "");
+                                            resultText = resultText.replaceAll("ind", "");
+                                            if (resultText.charAt(2) == 'O' || resultText.charAt(2) == 'o')
+                                                resultText = resultText.substring(0, 2) + '0' + resultText.substring(2 + 1);
                                             t1.setText(resultText);
-                                            if(pattern.matcher(resultText).matches())
-                                            {
-                                                number=resultText ;
-                                                new parsing(context).execute() ;
-                                            }
-                                            else{
-                                                warn.setText("Cant recognise registration number");
+                                            if (pattern.matcher(resultText).matches()) {
+                                                number = resultText;
+                                                new parsing(context).execute();
+                                                t1.setText("");
+                                                imageView.setImageBitmap(null);
+                                            } else {
+//                                                warn.setText("Cant recognise registration number");
+                                                Toast.makeText(MainActivity.this, "Ahhh Please type your number", Toast.LENGTH_LONG).show();
+                                                t1.setText("");
 
                                             }
-
-
-                                            Toast.makeText(MainActivity.this, "This is my Toast message!",
-                                                    Toast.LENGTH_LONG);
 
                                         }
                                     }
@@ -177,6 +184,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                     public void onFailure(@NonNull Exception e) {
                                         // Task failed with an exception
                                         // ...
+                                        Toast.makeText(MainActivity.this, "Ahhh..Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
                                     }
                                 });
     }
