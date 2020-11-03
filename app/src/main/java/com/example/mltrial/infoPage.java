@@ -32,32 +32,32 @@ public class infoPage extends AppCompatActivity {
 //The second parameter below is the default string returned if the value is not there.
         try {
             JSONObject jk = parsing.kl;
-            JSONObject temp = new JSONObject(jk.getJSONObject("Vehicle").getString("vehicleJson"));
+            //JSONObject temp = new JSONObject(jk.getJSONObject("Vehicle").getString("vehicleJson"));
 
           //  textView.setMovementMethod(new ScrollingMovementMethod());
-
-            System.out.println("=====================  infoPage");
-
-            System.out.println("Description:  " + temp.getString("Description") +
-                    "\nRegistration Year:  " + temp.getString("RegistrationDate") +
-                    "\nOwner:   " + temp.getString("Owner") + "\n" +
-                    "\nLocation:  " + temp.getString("Location"));
+//
+//            System.out.println("=====================  infoPage");
+//
+//            System.out.println("Description:  " + temp.getString("Description") +
+//                    "\nRegistration Year:  " + temp.getString("RegistrationDate") +
+//                    "\nOwner:   " + temp.getString("Owner") + "\n" +
+//                    "\nLocation:  " + temp.getString("Location"));
 //
 //            textView.setText("Description:  " + temp.getString("Description") +
 //                    "\nRegistration Year:  " + temp.getString("RegistrationDate") +
 //                    "\nOwner:   " + temp.getString("Owner") + "\n" +
 //                    "\nLocation:  " + temp.getString("Location"));
 
-
-            model.setText("Description:  " + temp.getString("Description") );
-            regDate.setText("Registration Year:  " + temp.getString("RegistrationDate"));
-            owner.setText("Owner:   " + temp.getString("Owner"));
-            location.setText("Location:  " + temp.getString("Location"));
+//
+//            model.setText("Description:  " + temp.getString("Description") );
+//            regDate.setText("Registration Year:  " + temp.getString("RegistrationDate"));
+//            owner.setText("Owner:   " + temp.getString("Owner"));
+//            location.setText("Location:  " + temp.getString("Location"));
            // Bitmap bitmap = BitmapFactory.decodeStream((InputStream)new URL(imageUrl).getContent());
         //    i.setImageBitmap(bitmap);
 
 
-        } catch (JSONException | NullPointerException e) {
+        } catch (NullPointerException e) {
             e.printStackTrace();
             System.out.println("Catch block===========\n" + parsing.kl.toString());
             model.setText("Description:  " + "?????????????????");
