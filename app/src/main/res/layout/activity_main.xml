@@ -35,7 +35,7 @@
         android:layout_below="@+id/capture_image"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="20dp"
-        android:layout_marginBottom="83dp"
+        android:layout_marginBottom="30dp"
         android:hint="Vehicle Registration number"
 
         app:startIconDrawable="@drawable/ic_numberplate_foreground">
@@ -47,8 +47,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="20dp"
             android:layout_marginEnd="13dp"
+            android:layout_marginBottom="30dp"
             android:ems="10"
-            android:layout_marginBottom="50dp"
             android:inputType="textCapCharacters"
             android:textAllCaps="true" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -74,10 +74,10 @@
         style="@style/Widget.MaterialComponents.Button.Icon"
         android:layout_width="340dp"
         android:layout_height="67dp"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="145dp"
+        android:layout_centerHorizontal="true"
         android:text="Check"
+        android:layout_marginBottom="87dp"
         app:icon="@drawable/ic_baseline_image_search_24"
         app:iconGravity="textStart"
         app:iconPadding="15dp"
