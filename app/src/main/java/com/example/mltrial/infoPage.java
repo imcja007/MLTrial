@@ -1,7 +1,6 @@
 package com.example.mltrial;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -81,7 +80,8 @@ public class infoPage extends AppCompatActivity {
     }
 
     public void back(View view) {
-        Intent i = new Intent(this, MainActivity.class);
-        this.startActivity(i);
+//        Intent i = new Intent(this, MainActivity.class);
+//        this.startActivity(i);
+        finish();
     }
 }
