@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
+import java.net.URISyntaxException;
 import java.net.URL;
 
 public class parsing extends AsyncTask {
@@ -41,8 +42,8 @@ public class parsing extends AsyncTask {
             URL url = new URL(url2);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
-//            urlConnection.setRequestProperty("API-Key", "f046707c4bfa4f13bdde752cd1fcbd0d");
-            urlConnection.setRequestProperty("API-Key", "29e683451a914df882eaa2f7268a21a4"); //chirag key
+           urlConnection.setRequestProperty("API-Key", "f046707c4bfa4f13bdde752cd1fcbd0d");
+//            urlConnection.setRequestProperty("API-Key", "29e683451a914df882eaa2f7268a21a4"); //chirag key
             int statusCode = urlConnection.getResponseCode();
             kl = new JSONObject();
             System.out.println("Status code is   " + statusCode);
@@ -69,7 +70,7 @@ public class parsing extends AsyncTask {
 //
 //            //pgsBar.setVisibility(View.GONE);
 //            startActivity(i);
-        } catch (IOException | JSONException e) {
+        } catch (IOException | JSONException |NullPointerException e) {
             e.printStackTrace();
         }
 
