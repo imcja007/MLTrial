@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -191,4 +193,22 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     public void back(View view) {
         finish();
     }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.add_record) {
+
+            Intent add_mem = new Intent(this, history.class);
+            startActivity(add_mem);
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 }

@@ -27,7 +27,7 @@ public class parsing extends AsyncTask {
         this.context= context;
     }
     static JSONObject kl;
-
+    DBManager dbManager ;
     protected JSONObject doInBackground(Object[] objects) {
       // MainActivity.pgsBar.setVisibility(View.VISIBLE);
 
@@ -84,6 +84,11 @@ public class parsing extends AsyncTask {
 
     @Override
     protected void onPreExecute() {
+        dbManager = new DBManager(context.getApplicationContext());
+        dbManager.open();
+        final String name =MainActivity.number ;
+
+        dbManager.insert(name);
         MainActivity.nDialog.show();
     }
 
