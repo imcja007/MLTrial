@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,7 +40,6 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Uri mImageUri;
     static String resultText;
     private ImageView imageView;
-    TextView warn;
     private InputImage image;
     private TextInputEditText t1;
     static ProgressDialog nDialog;
@@ -51,7 +49,8 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Pattern pattern = Pattern.compile(pattern2);
     Matcher matcher;
 
-    private static int SPLASH_SCREEN_TIME_OUT=2000;
+    private static int SPLASH_SCREEN_TIME_OUT = 2000;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,8 +67,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         nDialog.setIndeterminate(false);
         nDialog.setCancelable(true);
         nDialog.dismiss();
-        Toast.makeText(MainActivity.this, "This is my Toast message!",
-                Toast.LENGTH_LONG);
+
         conf.setOnClickListener(new View.OnClickListener() {
             @Override
 
@@ -80,7 +78,8 @@ public class MainActivity<nDialog> extends AppCompatActivity {
 //                    new parsing(context).execute();
 //                    t1.setText("");
 
-                    number = t1.getText().toString().replaceAll("\\s", "").trim().toUpperCase();
+                    number = (t1.getText().toString().replaceAll("\\s", "").trim()).toUpperCase();
+                    System.out.println("%%%%%%%%%%%%%%%%%%%%%" + number);
                     if (pattern.matcher(number).matches()) {
                         new parsing(context).execute();
                         t1.setText("");
@@ -187,5 +186,9 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                         Toast.makeText(MainActivity.this, "Ahhh..Something went wrong. Please try again.", Toast.LENGTH_LONG).show();
                                     }
                                 });
+    }
+
+    public void back(View view) {
+        finish();
     }
 }

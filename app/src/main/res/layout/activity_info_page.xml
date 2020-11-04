@@ -1,157 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content" android:layout_height="wrap_content"
-    android:scrollbarStyle="outsideInset">
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"  >
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal">
+        android:layout_height="match_parent"></ListView>
 
-            <TextView
-                android:id="@+id/owner"
-                android:layout_width="377dp"
-                android:layout_height="49dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginEnd="3dp"
-                android:layout_marginBottom="401dp"
-                android:text="Owner"
-                android:textSize="20sp"/>
-            <!--        tools:layout_editor_absoluteX="60dp"-->
-            <!--        -->
-            <!--        tools:layout_editor_absoluteY="136dp" -->
+    <!--    <Button-->
+    <!--        android:id="@+id/btn"-->
+    <!--        android:layout_width="350dp"-->
+    <!--        android:layout_height="47dp"-->
 
-            <TextView
-                android:id="@+id/regno"
-                android:layout_width="377dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="49dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="671dp"
-                android:text="Registration Number"
-                android:textSize="20sp" />
-            <!--        tools:layout_editor_absoluteX="60dp"-->
-            <!--        tools:layout_editor_absoluteY="136dp" />-->
-
-            <TextView
-                android:id="@+id/model"
-                android:layout_width="377dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="473dp"
-                android:text="Model"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/location"
-                android:layout_width="377dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="0dp"
-                android:layout_marginBottom="546dp"
-                android:text="Location"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/insurance"
-                android:layout_width="377dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="45dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="9dp"
-                android:layout_marginBottom="90dp"
-                android:text="Insurance Expiry"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/regDate"
-                android:layout_width="377dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="49dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginEnd="3dp"
-                android:layout_marginBottom="616dp"
-                android:text="Registration Date"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/fuel"
-                android:layout_width="403dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_centerInParent="true"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="3dp"
-                android:layout_marginBottom="326dp"
-                android:text="Fuel type"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/chassis"
-                android:layout_width="403dp"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="-3dp"
-                android:layout_marginEnd="11dp"
-                android:layout_marginBottom="244dp"
-                android:text="Chassis Number"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/engine"
-                android:layout_width="350dp"
-                android:layout_centerHorizontal="true"
-                android:layout_height="60dp"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="12dp"
-                android:layout_marginBottom="162dp"
-                android:text="Engine Number"
-                android:textSize="20sp" />
-
-            <Button
-                android:id="@+id/btn"
-                android:layout_width="377dp"
-                android:layout_height="47dp"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="28dp"
-                android:onClick="back"
-                android:text="Go Back" />
-
-
-            <!--        <TextView-->
-            <!--            android:id="@+id/info"-->
-            <!--            android:layout_width="match_parent"-->
-            <!--            android:layout_height="wrap_content"-->
-            <!--            android:text="INFO HERE!!"-->
-            <!--            android:textSize="30sp" />-->
-
-        </RelativeLayout>
-    </LinearLayout>
-</ScrollView>
-
+    <!--        android:layout_marginLeft="28dp"-->
+    <!--        android:layout_marginTop="30px"-->
+    <!--        android:layout_marginBottom="28dp"-->
+    <!--        android:onClick="back"-->
+    <!--        android:text="Go Back" />-->
+</LinearLayout>
