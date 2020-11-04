@@ -34,15 +34,17 @@ public class DBManager {
     public void insert(String name) {
         Calendar calobj = Calendar.getInstance();
 
+        String [] he=calobj.getTime().toString().split(" ");
+        String formattedTime =he[0]+" "+he[1]+" "+he[2]+" "+he[3];
         ContentValues contentValue = new ContentValues();
         contentValue.put(DatabaseHelper.NUMBER, name);
-        contentValue.put(DatabaseHelper.DATE, calobj.getTime().toString());
+        contentValue.put(DatabaseHelper.DATE, formattedTime);
         database.insert(DatabaseHelper.TABLE_NAME, null, contentValue);
     }
 
     public Cursor fetch() {
         String[] columns = new String[] { DatabaseHelper._ID, DatabaseHelper.NUMBER, DatabaseHelper.DATE };
-        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = database.query(DatabaseHelper.TABLE_NAME, columns, null, null, null, null, "_ID"+ " DESC");
         if (cursor != null) {
             cursor.moveToFirst();
         }
@@ -53,5 +55,8 @@ public class DBManager {
     public void delete(long _id) {
         database.delete(DatabaseHelper.TABLE_NAME, DatabaseHelper._ID + "=" + _id, null);
     }
-
+    public void deleteAll(){
+        database.delete(DatabaseHelper.TABLE_NAME, null, null);
+        System.out.println("Table cleared");
+    }
 }

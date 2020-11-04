@@ -66,8 +66,8 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         nDialog = new ProgressDialog(MainActivity.this);
         nDialog.setMessage("Sabr rakhlo bhai thoda..");
         nDialog.setTitle("Fetching Data");
-        nDialog.setIndeterminate(false);
-        nDialog.setCancelable(true);
+        nDialog.setIndeterminate(true);
+        nDialog.setCancelable(false);
         nDialog.dismiss();
 
         conf.setOnClickListener(new View.OnClickListener() {

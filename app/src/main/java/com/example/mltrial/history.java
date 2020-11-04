@@ -1,6 +1,7 @@
 package com.example.mltrial;
 
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -10,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.database.Cursor;
@@ -21,13 +23,13 @@ public class history extends AppCompatActivity {
     private DBManager dbManager;
     Context context = history.this;
     private ListView listView;
-
+    Button deleteRecord ;
     private SimpleCursorAdapter adapter;
 
-    final String[] from = new String[] { DatabaseHelper._ID,
+    final String[] from = new String[] {
             DatabaseHelper.NUMBER, DatabaseHelper.DATE };
 
-    final int[] to = new int[] { R.id.id, R.id.number, R.id.date };
+    final int[] to = new int[] {  R.id.number, R.id.date };
 
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,11 +37,13 @@ public class history extends AppCompatActivity {
         
 
         setContentView(R.layout.activity_history);
-
+        deleteRecord=findViewById(R.id.deleteRecord) ;
         dbManager = new DBManager(this);
         dbManager.open();
         Cursor cursor = dbManager.fetch();
 
+
+        final TextView descTextView = (TextView)findViewById(R.id.empty);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
 
@@ -47,20 +51,32 @@ public class history extends AppCompatActivity {
         adapter.notifyDataSetChanged();
 
         listView.setAdapter(adapter);
+        deleteRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("buton clicked");
 
+                dbManager.deleteAll();
+                listView.setAdapter(null);
+                descTextView.setText("History Cleared");
+                adapter.notifyDataSetChanged();
+            }
+        });
         // OnCLickListiner For List Items
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long viewId) {
-                TextView idTextView = (TextView) view.findViewById(R.id.id);
+
                 TextView titleTextView = (TextView) view.findViewById(R.id.number);
-                TextView descTextView = (TextView) view.findViewById(R.id.date);
 
-                String id = idTextView.getText().toString();
+
                 String title = titleTextView.getText().toString();
-                String desc = descTextView.getText().toString();
-
                 MainActivity.number=title ;
+                MainActivity.nDialog = new ProgressDialog(history.this);
+                MainActivity.nDialog.setMessage("Sabr rakhlo bhai thoda..");
+                MainActivity.nDialog.setTitle("Fetching Data");
+                MainActivity.nDialog.setIndeterminate(false);
+                MainActivity.nDialog.setCancelable(false);
                 new parsing(context).execute();
 //
 //                Intent modify_intent = new Intent(getApplicationContext(), ModifyCountryActivity.class);
@@ -71,6 +87,7 @@ public class history extends AppCompatActivity {
 //                startActivity(modify_intent);
             }
         });
+
     }
 
     @Override
