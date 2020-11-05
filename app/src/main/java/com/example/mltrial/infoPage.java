@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,9 +40,13 @@ public class infoPage extends AppCompatActivity {
 //The second parameter below is the default string returned if the value is not there.
         try {
             JSONObject temp = parsing.kl;
-
+            if (temp == null) {
+                Toast.makeText(infoPage.this, "Ahhh..Please enter a valid number. No data found.", Toast.LENGTH_LONG).show();
+                finish();
+            }
 //            System.out.println("=====================  infoPage");
             setTitle(temp.getString("Registeration Number"));
+
             hash.put("Owner", temp.getString("Owner Name"));
             hash.put("Registration Date", temp.getString("Reg Date"));
             hash.put("Registering Authority", temp.getString("Registering Authority"));

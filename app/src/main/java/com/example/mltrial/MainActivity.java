@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -51,12 +49,13 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     Pattern pattern = Pattern.compile(pattern2);
     Matcher matcher;
 
-    private static int SPLASH_SCREEN_TIME_OUT = 2000;
+    private static int SPLASH_SCREEN_TIME_OUT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         assert getSupportActionBar() != null;   //null check
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -144,41 +143,58 @@ public class MainActivity<nDialog> extends AppCompatActivity {
                                 // [START mlkit_process_text_block]
                                 resultText = result.getText().trim();
                                 System.out.println("RESULT TEXT=====================" + resultText);
-                                for (Text.TextBlock block : result.getTextBlocks()) {
-                                    String blockText = block.getText();
-                                    Point[] blockCornerPoints = block.getCornerPoints();
-                                    Rect blockFrame = block.getBoundingBox();
-                                    for (Text.Line line : block.getLines()) {
-                                        String lineText = line.getText();
-                                        System.out.println("Line TEXT=====================" + lineText);
-                                        Point[] lineCornerPoints = line.getCornerPoints();
-                                        Rect lineFrame = line.getBoundingBox();
-                                        for (Text.Element element : line.getElements()) {
-                                            String elementText = element.getText();
-                                            Point[] elementCornerPoints = element.getCornerPoints();
-                                            Rect elementFrame = element.getBoundingBox();
-                                            System.out.println("elemnt TEXT=====================" + elementText);
-                                            resultText = resultText.replaceAll("\\s", "");
-                                            resultText = resultText.replaceAll("IND", "");
-                                            resultText = resultText.replaceAll("ind", "");
-                                            if (resultText.charAt(2) == 'O' || resultText.charAt(2) == 'o')
-                                                resultText = resultText.substring(0, 2) + '0' + resultText.substring(2 + 1);
-                                            t1.setText(resultText);
-                                            if (pattern.matcher(resultText).matches()) {
-                                                number = resultText;
-                                                new parsing(context).execute();
-                                                t1.setText("");
-                                                imageView.setImageBitmap(null);
-                                            } else {
+                                resultText = resultText.replaceAll("\\s", "");
+                                resultText = resultText.replaceAll("IND", "");
+                                resultText = resultText.replaceAll("ind", "");
+                                if (resultText.charAt(2) == 'O' || resultText.charAt(2) == 'o')
+                                    resultText = resultText.substring(0, 2) + '0' + resultText.substring(2 + 1);
+                                t1.setText(resultText);
+                                if (pattern.matcher(resultText).matches()) {
+                                    number = resultText;
+                                    new parsing(context).execute();
+                                    t1.setText("");
+                                    imageView.setImageBitmap(null);
+                                } else {
 //                                                warn.setText("Cant recognise registration number");
-                                                Toast.makeText(MainActivity.this, "Ahhh Please type your number", Toast.LENGTH_LONG).show();
-                                                t1.setText("");
+                                    Toast.makeText(MainActivity.this, "Ahhh..Please retry or type vehicle number", Toast.LENGTH_LONG).show();
+                                    t1.setText("");
 
-                                            }
-
-                                        }
-                                    }
                                 }
+//                                for (Text.TextBlock block : result.getTextBlocks()) {
+//                                    String blockText = block.getText();
+//                                    Point[] blockCornerPoints = block.getCornerPoints();
+//                                    Rect blockFrame = block.getBoundingBox();
+//                                    for (Text.Line line : block.getLines()) {
+//                                        String lineText = line.getText();
+//                                        System.out.println("Line TEXT=====================" + lineText);
+//                                        Point[] lineCornerPoints = line.getCornerPoints();
+//                                        Rect lineFrame = line.getBoundingBox();
+//                                        for (Text.Element element : line.getElements()) {
+//                                            String elementText = element.getText();
+//                                            Point[] elementCornerPoints = element.getCornerPoints();
+//                                            Rect elementFrame = element.getBoundingBox();
+//                                            System.out.println("elemnt TEXT=====================" + elementText);
+//                                            resultText = resultText.replaceAll("\\s", "");
+//                                            resultText = resultText.replaceAll("IND", "");
+//                                            resultText = resultText.replaceAll("ind", "");
+//                                            if (resultText.charAt(2) == 'O' || resultText.charAt(2) == 'o')
+//                                                resultText = resultText.substring(0, 2) + '0' + resultText.substring(2 + 1);
+//                                            t1.setText(resultText);
+//                                            if (pattern.matcher(resultText).matches()) {
+//                                                number = resultText;
+//                                                new parsing(context).execute();
+//                                                t1.setText("");
+//                                                imageView.setImageBitmap(null);
+//                                            } else {
+////                                                warn.setText("Cant recognise registration number");
+//                                                Toast.makeText(MainActivity.this, "Ahhh Please type your number", Toast.LENGTH_LONG).show();
+//                                                t1.setText("");
+//
+//                                            }
+//
+//                                        }
+//                                    }
+//                                }
                             }
                         })
                         .addOnFailureListener(
