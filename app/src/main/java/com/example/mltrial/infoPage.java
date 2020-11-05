@@ -28,7 +28,8 @@ public class infoPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_page);
-
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         HashMap<String, String> hash = new HashMap<String, String>();
         ListView listView1 = findViewById(R.id.listView);
@@ -40,7 +41,7 @@ public class infoPage extends AppCompatActivity {
             JSONObject temp = parsing.kl;
 
 //            System.out.println("=====================  infoPage");
-
+            setTitle(temp.getString("Registeration Number"));
             hash.put("Owner", temp.getString("Owner Name"));
             hash.put("Registration Date", temp.getString("Reg Date"));
             hash.put("Registering Authority", temp.getString("Registering Authority"));
@@ -78,7 +79,11 @@ public class infoPage extends AppCompatActivity {
 
     }
 
-
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
     class MyAdapter extends ArrayAdapter<String> {
         Context context;
         ArrayList<String> x;

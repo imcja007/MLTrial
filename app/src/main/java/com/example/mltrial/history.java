@@ -37,6 +37,8 @@ public class history extends AppCompatActivity {
         
 
         setContentView(R.layout.activity_history);
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         deleteRecord=findViewById(R.id.deleteRecord) ;
         dbManager = new DBManager(this);
         dbManager.open();
@@ -89,12 +91,17 @@ public class history extends AppCompatActivity {
         });
 
     }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+    public boolean onSupportNavigateUp() {
+        finish();
         return true;
     }
+
+//    @Override
+//    public boolean onCreateOptionsMenu(Menu menu) {
+//        getMenuInflater().inflate(R.menu.menu, menu);
+//        return true;
+//    }
 
 
 
