@@ -56,8 +56,6 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        assert getSupportActionBar() != null;   //null check
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
@@ -186,7 +184,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
 //                                                t1.setText("");
 //                                                imageView.setImageBitmap(null);
 //                                            } else {
-////                                                warn.setText("Cant recognise registration number");
+//                                              warn.setText("Cant recognise registration number");
 //                                                Toast.makeText(MainActivity.this, "Ahhh Please type your number", Toast.LENGTH_LONG).show();
 //                                                t1.setText("");
 //
@@ -229,10 +227,6 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public boolean onSupportNavigateUp() {
-        finish();
-        return true;
-    }
+
 
 }
