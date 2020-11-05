@@ -3,19 +3,16 @@ package com.example.mltrial;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
-import android.database.Cursor;
-import android.widget.SimpleCursorAdapter ;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 public class history extends AppCompatActivity {
@@ -23,27 +20,25 @@ public class history extends AppCompatActivity {
     private DBManager dbManager;
     Context context = history.this;
     private ListView listView;
-    Button deleteRecord ;
+    final String[] from = new String[]{
+            DatabaseHelper.NUMBER, DatabaseHelper.DATE};
     private SimpleCursorAdapter adapter;
-
-    final String[] from = new String[] {
-            DatabaseHelper.NUMBER, DatabaseHelper.DATE };
-
-    final int[] to = new int[] {  R.id.number, R.id.date };
-
+    final int[] to = new int[]{R.id.number, R.id.date};
+    Button deleteRecord;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-
         setContentView(R.layout.activity_history);
-        deleteRecord=findViewById(R.id.deleteRecord) ;
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        deleteRecord = findViewById(R.id.deleteRecord);
         dbManager = new DBManager(this);
         dbManager.open();
         Cursor cursor = dbManager.fetch();
 
 
-        final TextView descTextView = (TextView)findViewById(R.id.empty);
+        final TextView descTextView = (TextView) findViewById(R.id.empty);
         listView = (ListView) findViewById(R.id.list_view);
         listView.setEmptyView(findViewById(R.id.empty));
 
@@ -71,7 +66,7 @@ public class history extends AppCompatActivity {
 
 
                 String title = titleTextView.getText().toString();
-                MainActivity.number=title ;
+                MainActivity.number = title;
                 MainActivity.nDialog = new ProgressDialog(history.this);
                 MainActivity.nDialog.setMessage("Sabr rakhlo bhai thoda..");
                 MainActivity.nDialog.setTitle("Fetching Data");
@@ -91,11 +86,16 @@ public class history extends AppCompatActivity {
     }
 
     @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return true;
     }
-
 
 
 }

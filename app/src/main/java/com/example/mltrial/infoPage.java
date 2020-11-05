@@ -28,6 +28,8 @@ public class infoPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info_page);
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
         HashMap<String, String> hash = new HashMap<String, String>();
@@ -78,6 +80,11 @@ public class infoPage extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
+    }
 
     class MyAdapter extends ArrayAdapter<String> {
         Context context;

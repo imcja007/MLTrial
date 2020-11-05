@@ -7,8 +7,9 @@
             android:id="@+id/add_record"
             android:icon="@android:drawable/ic_menu_recent_history"
             android:orderInCategory="100"
-            android:tooltipText="Viwe recent searches"
+            android:tooltipText="View recent searches"
             android:title="View Records"
             app:showAsAction="always"/>
 
     </menu>
+
