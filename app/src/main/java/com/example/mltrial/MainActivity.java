@@ -56,8 +56,10 @@ public class MainActivity<nDialog> extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
+        assert getSupportActionBar() != null;   //null check
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
         t1 = findViewById(R.id.regNo);
@@ -209,6 +211,12 @@ public class MainActivity<nDialog> extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
 }
