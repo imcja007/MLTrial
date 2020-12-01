@@ -1,12 +1,16 @@
 package com.example.mltrial;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,12 +35,13 @@ import com.theartofdev.edmodo.cropper.CropImage;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import	android.provider.Settings ;
 
 
 public class MainActivity<nDialog> extends AppCompatActivity {
 
     public static String number;
-    public Button conf;
+    public Button conf,check;
     Uri mImageUri;
     static String resultText;
     private ImageView imageView;
@@ -56,7 +61,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        check=findViewById(R.id.capture_image) ;
         imageView = findViewById(R.id.image_view);
         conf = findViewById(R.id.confirm_button);
         t1 = findViewById(R.id.regNo);
@@ -68,6 +73,20 @@ public class MainActivity<nDialog> extends AppCompatActivity {
         nDialog.setIndeterminate(true);
         nDialog.setCancelable(false);
         nDialog.dismiss();
+        if(!isConnectedToInternet())
+        {
+            conf.setEnabled(false);
+            check.setEnabled(false);
+
+            Toast.makeText(this,"Please Connect to internet",Toast.LENGTH_LONG).show();
+        }
+//        else
+//        {
+//           // Here I've been added intent to open up data settings
+//            Intent intent=new Intent(Settings.ACTION_WIRELESS_SETTINGS);
+//            ComponentName cName = new ComponentName("com.android.phone","com.android.phone.NetworkSetting");
+//            intent.setComponent(cName);
+//        }
 
         conf.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +112,21 @@ public class MainActivity<nDialog> extends AppCompatActivity {
             }
         });
     }
+    public boolean isConnectedToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null)
+        {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                    {
+                        return true;
+                    }
 
+        }
+        return false;
+    }
     public void onChooseFile(View v) {
         CropImage.activity().start(MainActivity.this);
 
