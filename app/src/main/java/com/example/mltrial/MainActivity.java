@@ -68,7 +68,7 @@ public class MainActivity<nDialog> extends AppCompatActivity {
 
         //   pgsBar = (ProgressBar) findViewById(R.id.pBar);
         nDialog = new ProgressDialog(MainActivity.this);
-        nDialog.setMessage("Sabr rakhlo bhai thoda..");
+        nDialog.setMessage("Fetching......Wait");
         nDialog.setTitle("Fetching Data");
         nDialog.setIndeterminate(true);
         nDialog.setCancelable(false);
